@@ -92,12 +92,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tableWidget_3.setHorizontalHeaderLabels(["时间", "工号", "姓名", "操作记录", "是否违规"])
         self.tableWidget_3.horizontalHeader().setStretchLastSection(True)
         self.tableWidget_3.verticalHeader().setStretchLastSection(True)
-        record = Database().get_record()
+        record = Database().get_record_by_id(self.id)
         for index,  value in enumerate(record):
             row = 0
             for key in value.keys():
-                item = QTableWidgetItem(value[key]) 
-                print(value[key])
+                item = QTableWidgetItem(str(value[key]))
                 item.setTextAlignment(Qt.AlignHCenter|Qt.AlignVCenter)   #设置表格内容居中
                 self.tableWidget_3.setItem(index, row,item)  
                 row += 1
@@ -109,6 +108,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         显示统计页面
         user ：管理员用户
         """
+        Database().new_record(2, 2)  #测试打卡功能
+        
         self.tabWidget.removeTab(0)  #除去原有page
         self.tabWidget.addTab(self.tabWidgetPage4, '统计') #添加新的page
         self.tableWidget_4.setColumnCount(5)
@@ -121,8 +122,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for index,  value in enumerate(record):
             row = 0
             for key in value.keys():
-                item = QTableWidgetItem(value[key]) 
-                print(value[key])
+                item = QTableWidgetItem(str(value[key]))
                 item.setTextAlignment(Qt.AlignHCenter|Qt.AlignVCenter)   #设置表格内容居中
                 self.tableWidget_4.setItem(index, row,item)  
                 row += 1
@@ -162,6 +162,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tabWidget.removeTab(0)  #除去原有page
         self.tabWidget.addTab(self.tabWidgetPage1, '用户信息') #添加新的page
         info = Database().get_user_info(self.id)
+        
         #更新表单
         self.label_2.setText(info['name']) #name
         self.label_3.setText(info['sex']) #sex
